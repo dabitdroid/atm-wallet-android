@@ -29,9 +29,9 @@ android {
     buildToolsVersion = '29.0.3'
     ext {
         brdMarketingVersion = 4   // Major version. Usually affected by marketing. Maximum value: 99
-        brdProductVersion = 5    // Minor version. Usually affected by product. Maximum value: 99
-        brdEngineeringVersion = 18 // Hot fix version. Usually affected by engineering. Maximum value: 9
-        brdBuildVersion = 25       // Build version. Increase for each new build. Maximum value: 999
+        brdProductVersion = 6    // Minor version. Usually affected by product. Maximum value: 99
+        brdEngineeringVersion = 0 // Hot fix version. Usually affected by engineering. Maximum value: 9
+        brdBuildVersion = 26       // Build version. Increase for each new build. Maximum value: 999
 
         // The version code must be monotonically increasing. It is used by Android to maintain upgrade/downgrade
         // relationship between builds with a max value of 2 100 000 000.
@@ -332,9 +332,10 @@ dependencies {
 
     detektPlugins "io.gitlab.arturbosch.detekt:detekt-formatting:$detekt_version"
 
-    implementation('cash.just.sdk:cashUI:3.4.1:release@aar') {
-        transitive = true
-    }
+//    implementation('cash.just.sdk:cashUI:3.4.1:release@aar') {
+//        transitive = true
+//    }
 
+    implementation 'com.github.atmcoin:cash-ui-android:3.5'
     implementation project(":AtmResources")
 }
