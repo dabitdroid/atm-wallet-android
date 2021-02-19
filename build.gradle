@@ -39,7 +39,6 @@ allprojects {
                 maven {
                     url 'https://dl.bintray.com/brd/walletkit-java'
                 }
-                maven { url 'https://jitpack.io' }
             }
             filter {
                 includeGroup "com.breadwallet.core"
@@ -57,5 +56,6 @@ allprojects {
         maven {
             url "https://just-cash-artifactory.s3.amazonaws.com"
         }
+        maven { url 'https://jitpack.io' }
     }
 }
