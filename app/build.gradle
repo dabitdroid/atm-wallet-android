@@ -336,6 +336,14 @@ dependencies {
 //        transitive = true
 //    }
 
-    implementation 'com.github.atmcoin:cash-ui-android:3.6'
+    implementation('com.github.atmcoin:cash-ui-android:3.8'){
+        transitive = true
+    }
     implementation project(":AtmResources")
+
+//    implementation 'org.jacoco:jacoco-maven-plugin:0.7.9'
+
+    //this fixes a recent crash
+    //java.lang.NoClassDefFoundError: Failed resolution of: Lorg/jacoco/agent/rt/internal_14f7ee5/
+    implementation 'org.jacoco:org.jacoco.agent:0.7.9:runtime'
 }
