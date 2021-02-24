@@ -68,7 +68,9 @@
             android:text="Not verified"
             android:layout_width="0dp"
             android:layout_height="wrap_content"/>
+
         <com.breadwallet.legacy.presenter.customviews.BRButton
+            android:id="@+id/verifyButton"
             android:text="Verify Now"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>

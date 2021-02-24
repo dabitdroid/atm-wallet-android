@@ -36,6 +36,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bluelinelabs.conductor.changehandler.HorizontalChangeHandler
 import com.breadwallet.R
 import com.breadwallet.app.BreadApp
+import com.breadwallet.legacy.presenter.customviews.BRDialogView
+import com.breadwallet.tools.animation.BRDialog
 import com.breadwallet.tools.util.Link
 import com.breadwallet.tools.util.ServerBundlesHelper
 import com.breadwallet.ui.BaseMobiusController
@@ -109,6 +111,22 @@ class SettingsController(
                 DividerItemDecoration.VERTICAL
             )
         )
+
+        verifyButton.setOnClickListener {
+            activity?.let {
+                BRDialog.showCustomDialog(it, "Verify your identity",
+                    "You can increase ATM limits by verifying your identity. Please complete the identification with the SSN number and uploading one document.",
+                    "Verify", "Not Now", object: BRDialogView.BROnClickListener {
+                        override fun onClick(brDialogView: BRDialogView?) {
+                            TODO("Not yet implemented")
+                        },
+                        object: BRDialogView.BROnClickListener {
+                            override fun onClick(brDialogView: BRDialogView?) {
+                                TODO("Not yet implemented")
+                            }
+                    }), null);
+            }
+        }
     }
 
     override fun bindView(modelFlow: Flow<M>): Flow<E> {
