@@ -113,18 +113,22 @@ class SettingsController(
         )
 
         verifyButton.setOnClickListener {
+            val posListener = object : BRDialogView.BROnClickListener {
+                override fun onClick(brDialogView: BRDialogView?) {
+                    //TODO("Not yet implemented")
+                }
+            }
+
+            val negListener = object : BRDialogView.BROnClickListener {
+                override fun onClick(brDialogView: BRDialogView?) {
+                    //TODO("Not yet implemented")
+                }
+            }
+
             activity?.let {
                 BRDialog.showCustomDialog(it, "Verify your identity",
                     "You can increase ATM limits by verifying your identity. Please complete the identification with the SSN number and uploading one document.",
-                    "Verify", "Not Now", object: BRDialogView.BROnClickListener {
-                        override fun onClick(brDialogView: BRDialogView?) {
-                            TODO("Not yet implemented")
-                        },
-                        object: BRDialogView.BROnClickListener {
-                            override fun onClick(brDialogView: BRDialogView?) {
-                                TODO("Not yet implemented")
-                            }
-                    }), null);
+                    "Verify Now", "Not Now", posListener, negListener, null, 0)
             }
         }
     }
