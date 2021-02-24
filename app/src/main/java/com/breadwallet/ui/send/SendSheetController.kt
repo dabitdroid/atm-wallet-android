@@ -122,7 +122,8 @@ class SendSheetController(args: Bundle? = null) :
     private val currencyCode = arg<String>(CURRENCY_CODE)
     private val cryptoRequestLink = argOptional<Link.CryptoRequestUrl>(CRYPTO_REQUEST_LINK)
     private val isAtm = arg(CRYPTO_IS_ATM, false)
-
+    private var currentFee:String = ""
+    private var currentAmount:String = ""
     override val layoutId = R.layout.controller_send_sheet
     override val init = SendSheetInit
     override val update = SendSheetUpdate
@@ -168,6 +169,28 @@ class SendSheetController(args: Bundle? = null) :
             layoutFeeOption.visibility = View.GONE
             disableEditText(textInputDestinationTag)
         }
+
+        feesHigh.setOnClickListener {
+            router.fragmentManager()?.let {
+                CashUI.showSupportPage(CashSupport.Builder().detail(Topic.HOW_CHANGE_CURRENCY), it)
+            }
+        }
+
+        refreshHighFee()
+    }
+
+    private fun refreshHighFee() {
+        if (currentFee.isNotEmpty() && currentAmount.isNotEmpty()) {
+           val fee = currentFee.toDoubleOrNull()
+           val amount = currentAmount.toDoubleOrNull()
+            if (fee != null && amount != null) {
+               if (amount*0.2 < fee)  {
+                   feesHigh.visibility = View.VISIBLE
+                   return
+               }
+            }
+        }
+        feesHigh.visibility = View.GONE
     }
 
     override fun onDestroyView(view: View) {
@@ -365,7 +388,7 @@ class SendSheetController(args: Bundle? = null) :
             val sendTitle = res.getString(R.string.Send_title)
             val upperCaseCurrencyCode = currencyCode.toUpperCase(Locale.getDefault())
             if (isAtm) {
-                labelTitle.text = "Send to ATM"
+                labelTitle.text = "Send BTC for ATM Cash"
             } else {
                 labelTitle.text = "%s %s".format(sendTitle, upperCaseCurrencyCode)
             }
@@ -390,7 +413,11 @@ class SendSheetController(args: Bundle? = null) :
             } else {
                 rawAmount.formatFiatForInputUi(fiatCode)
             }
+            currentAmount = rawAmount
+
             textInputAmount.setText(formattedAmount)
+
+            refreshHighFee()
         }
 
         ifChanged(
@@ -400,14 +427,17 @@ class SendSheetController(args: Bundle? = null) :
             M::isAmountCrypto
         ) {
             labelNetworkFee.isVisible = networkFee != BigDecimal.ZERO
+            currentFee = when {
+                isAmountCrypto ->
+                    networkFee.formatCryptoForUi(feeCurrencyCode, MAX_DIGITS)
+                else -> fiatNetworkFee.formatFiatForUi(fiatCode)
+            }
+
             labelNetworkFee.text = res.getString(
-                R.string.Send_fee,
-                when {
-                    isAmountCrypto ->
-                        networkFee.formatCryptoForUi(feeCurrencyCode, MAX_DIGITS)
-                    else -> fiatNetworkFee.formatFiatForUi(fiatCode)
-                }
+                R.string.Send_fee, currentFee
             )
+
+            refreshHighFee()
         }
 
         ifChanged(
