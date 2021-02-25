@@ -63,6 +63,7 @@ import com.breadwallet.ui.send.SendSheet.E
 import com.breadwallet.ui.send.SendSheet.E.OnAmountChange
 import com.breadwallet.ui.send.SendSheet.F
 import com.breadwallet.ui.send.SendSheet.M
+import com.breadwallet.util.isBitcoin
 import com.breadwallet.util.isErc20
 import com.breadwallet.util.isEthereum
 import com.spotify.mobius.Connectable
@@ -180,17 +181,18 @@ class SendSheetController(args: Bundle? = null) :
     }
 
     private fun refreshHighFee() {
-        if (currentFee.isNotEmpty() && currentAmount.isNotEmpty()) {
+        if (currencyCode != null && currencyCode.isBitcoin()
+            && currentFee.isNotEmpty() && currentAmount.isNotEmpty()) {
            val fee = currentFee.toDoubleOrNull()
            val amount = currentAmount.toDoubleOrNull()
             if (fee != null && amount != null) {
-               if (amount*0.2 < fee)  {
-                   feesHigh.visibility = View.VISIBLE
+               if (amount > 0 && amount > fee && amount*0.2 < fee)  {
+                   feesHighGroup.visibility = View.VISIBLE
                    return
                }
             }
         }
-        feesHigh.visibility = View.GONE
+        feesHighGroup.visibility = View.GONE
     }
 
     override fun onDestroyView(view: View) {

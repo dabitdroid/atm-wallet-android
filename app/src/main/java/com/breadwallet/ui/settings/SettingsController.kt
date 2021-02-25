@@ -112,6 +112,8 @@ class SettingsController(
             )
         )
 
+        verificationGroup.visibility = View.GONE
+
         verifyButton.setOnClickListener {
             val posListener = object : BRDialogView.BROnClickListener {
                 override fun onClick(brDialogView: BRDialogView?) {

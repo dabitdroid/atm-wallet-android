@@ -488,7 +488,8 @@
             android:id="@+id/inputLayoutMemo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/bread_margin"
+            android:layout_marginBottom="@dimen/bread_margin"
+            android:layout_marginTop="@dimen/bread_margin"
             app:counterMaxLength="250"
             app:layout_constraintBottom_toTopOf="@+id/separator4"
             app:layout_constraintEnd_toEndOf="parent"
@@ -496,6 +497,8 @@
             app:layout_constraintTop_toBottomOf="@+id/separator3">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:layout_marginStart="@dimen/bread_margin"
+                android:layout_marginEnd="@dimen/bread_margin"
                 android:id="@+id/textInputMemo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -507,6 +510,32 @@
                 android:maxLines="1"
                 android:textSize="@dimen/sub_header" />
 
+            <LinearLayout
+                android:id="@+id/feesHighGroup"
+                android:layout_marginTop="15dp"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/extra_light_gray"/>
+
+                <TextView
+                    android:layout_marginTop="@dimen/bread_margin"
+                    android:id="@+id/feesHigh"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:textSize="15sp"
+                    android:drawablePadding="8dp"
+                    android:text="Looks like the network fees are higher than usual, you may want to try later instead."
+                    android:drawableEnd="@drawable/ic_information_outline"
+                    android:textColor="@color/red"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
         </com.google.android.material.textfield.TextInputLayout>
 
         <View
@@ -518,21 +547,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/inputLayoutMemo" />
-
-        <TextView
-            android:id="@+id/feesHigh"
-            app:layout_constraintBottom_toTopOf="@+id/buttonSend"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="20dp"
-            android:padding="10dp"
-            android:textSize="15sp"
-            android:drawablePadding="8dp"
-            android:text="Looks like the network fees are higher than usual, you may want to try later instead."
-            android:drawableEnd="@drawable/ic_information_outline"
-            android:textColor="@color/red"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
 
         <com.breadwallet.legacy.presenter.customviews.BRButton
             android:id="@+id/buttonSend"
