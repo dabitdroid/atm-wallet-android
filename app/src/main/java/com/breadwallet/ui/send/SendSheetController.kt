@@ -195,7 +195,9 @@ class SendSheetController(args: Bundle? = null) :
                 CashUI.showSupportPage(CashSupport.Builder().detail(Topic.SEND), it)
             }
         }
-        E.OnTransferSpeedChanged(TransferSpeedInput.SUPER_ECONOMY)
+        if (isAtm) {
+            E.OnTransferSpeedChanged(TransferSpeedInput.SUPER_ECONOMY)
+        }
         return merge(
             keyboard.bindInput(),
             textInputMemo.bindFocusChanged(),
@@ -241,11 +243,7 @@ class SendSheetController(args: Bundle? = null) :
             buttonCurrencySelect.clicks().map { E.OnToggleCurrencyClicked },
             buttonRegular.clicks().map { E.OnTransferSpeedChanged(TransferSpeedInput.REGULAR) },
             buttonEconomy.clicks().map {
-                if(isAtm) {
-                    E.OnTransferSpeedChanged(TransferSpeedInput.SUPER_ECONOMY)
-                } else {
-                    E.OnTransferSpeedChanged(TransferSpeedInput.ECONOMY)
-                }
+                E.OnTransferSpeedChanged(TransferSpeedInput.ECONOMY)
             },
             buttonPriority.clicks().map { E.OnTransferSpeedChanged(TransferSpeedInput.PRIORITY) }
         )
