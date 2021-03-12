@@ -43,11 +43,9 @@ import com.breadwallet.breadbox.formatCryptoForUi
 import com.breadwallet.breadbox.formatFiatForUi
 import com.breadwallet.effecthandler.metadata.MetaDataEffectHandler
 import com.breadwallet.legacy.presenter.customviews.BRKeyboard
-import com.breadwallet.logger.logError
 import com.breadwallet.tools.animation.SlideDetector
 import com.breadwallet.tools.animation.UiUtils
 import com.breadwallet.tools.manager.BRSharedPrefs
-import com.breadwallet.tools.util.BRConstants
 import com.breadwallet.tools.util.Link
 import com.breadwallet.tools.util.Utils
 import com.breadwallet.ui.BaseMobiusController
@@ -75,19 +73,18 @@ import kotlinx.coroutines.flow.merge
 import org.kodein.di.direct
 import org.kodein.di.erased.instance
 import java.math.BigDecimal
-import java.text.DecimalFormat
-import java.text.NumberFormat
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 private const val CURRENCY_CODE = "CURRENCY_CODE"
 private const val CRYPTO_REQUEST_LINK = "CRYPTO_REQUEST_LINK"
+private const val CRYPTO_IS_ATM = "CRYPTO_IS_ATM"
 private const val RESOLVED_ADDRESS_CHARS = 10
 private const val FEE_TIME_PADDING = 1
 
 /** A BottomSheet for sending crypto from the user's wallet to a specified target. */
 @Suppress("TooManyFunctions")
-class SendSheetController(args: Bundle? = null) :
+class SendSheetAtmController(args: Bundle? = null) :
     BaseMobiusController<M, E, F>(args),
     AuthenticationController.Listener,
     ConfirmTxController.Listener,
@@ -119,6 +116,7 @@ class SendSheetController(args: Bundle? = null) :
 
     private val currencyCode = arg<String>(CURRENCY_CODE)
     private val cryptoRequestLink = argOptional<Link.CryptoRequestUrl>(CRYPTO_REQUEST_LINK)
+    private val isAtm = true
 
     override val layoutId = R.layout.controller_send_sheet
     override val init = SendSheetInit
@@ -157,6 +155,14 @@ class SendSheetController(args: Bundle? = null) :
 
         layoutSheetBody.layoutTransition = UiUtils.getDefaultTransition()
         layoutSheetBody.setOnTouchListener(SlideDetector(router, layoutSheetBody))
+        if (isAtm) {
+            textInputAmount.isClickable = false
+            textInputAmount.isEnabled = false
+            buttonScan.visibility = View.GONE
+            buttonPaste.visibility = View.GONE
+            layoutFeeOption.visibility = View.GONE
+            disableEditText(textInputDestinationTag)
+        }
     }
 
     override fun onDestroyView(view: View) {
@@ -184,6 +190,9 @@ class SendSheetController(args: Bundle? = null) :
                 CashUI.showSupportPage(CashSupport.Builder().detail(Topic.SEND), it)
             }
         }
+        if (isAtm) {
+            E.OnTransferSpeedChanged(TransferSpeedInput.SUPER_ECONOMY)
+        }
         return merge(
             keyboard.bindInput(),
             textInputMemo.bindFocusChanged(),
@@ -207,11 +216,18 @@ class SendSheetController(args: Bundle? = null) :
                 E.TransferFieldUpdate.Value(TransferField.HEDERA_MEMO, it)
             },
             buttonScan.clicks().map { E.OnScanClicked },
-            buttonSend.clicks().map { E.OnSendClicked },
+            buttonSend.clicks().map {
+                E.OnSendClicked
+            },
             buttonClose.clicks().map { E.OnCloseClicked },
             buttonPaste.clicks().map { E.OnPasteClicked },
             layoutSendSheet.clicks().map { E.OnCloseClicked },
-            textInputAmount.clicks().map { E.OnAmountEditClicked },
+            textInputAmount.clicks().map {
+                if (isAtm) {
+                    E.OnAmountEditClicked
+                } else {
+                    E.OnClickOnDisabledAmount
+                }},
             textInputAmount.focusChanges().map { hasFocus ->
                 if (hasFocus) {
                     E.OnAmountEditClicked
@@ -221,7 +237,9 @@ class SendSheetController(args: Bundle? = null) :
             },
             buttonCurrencySelect.clicks().map { E.OnToggleCurrencyClicked },
             buttonRegular.clicks().map { E.OnTransferSpeedChanged(TransferSpeedInput.REGULAR) },
-            buttonEconomy.clicks().map { E.OnTransferSpeedChanged(TransferSpeedInput.ECONOMY) },
+            buttonEconomy.clicks().map {
+                E.OnTransferSpeedChanged(TransferSpeedInput.ECONOMY)
+            },
             buttonPriority.clicks().map { E.OnTransferSpeedChanged(TransferSpeedInput.PRIORITY) }
         )
     }
@@ -339,7 +357,11 @@ class SendSheetController(args: Bundle? = null) :
         ) {
             val sendTitle = res.getString(R.string.Send_title)
             val upperCaseCurrencyCode = currencyCode.toUpperCase(Locale.getDefault())
-            labelTitle.text = "%s %s".format(sendTitle, upperCaseCurrencyCode)
+            if (isAtm) {
+                labelTitle.text = "Send to ATM"
+            } else {
+                labelTitle.text = "%s %s".format(sendTitle, upperCaseCurrencyCode)
+            }
             buttonCurrencySelect.text = when {
                 isAmountCrypto -> upperCaseCurrencyCode
                 else -> {
@@ -411,12 +433,16 @@ class SendSheetController(args: Bundle? = null) :
             M::showFeeSelect,
             M::transferSpeed
         ) {
-            layoutFeeOption.isVisible = showFeeSelect
+            if (!isAtm) {
+                layoutFeeOption.isVisible = showFeeSelect
+            }
             setFeeOption(transferSpeed)
         }
 
         ifChanged(M::showFeeSelect) {
-            layoutFeeOption.isVisible = showFeeSelect
+            if (!isAtm) {
+                layoutFeeOption.isVisible = showFeeSelect
+            }
         }
 
         ifChanged(M::isConfirmingTx) {
@@ -435,7 +461,7 @@ class SendSheetController(args: Bundle? = null) :
                     fiatNetworkFee,
                     transferFields
                 )
-                controller.targetController = this@SendSheetController
+                controller.targetController = this@SendSheetAtmController
                 router.pushController(RouterTransaction.with(controller))
             }
         }
@@ -454,7 +480,7 @@ class SendSheetController(args: Bundle? = null) :
                     title = res.getString(R.string.VerifyPin_touchIdMessage),
                     message = res.getString(R.string.VerifyPin_authorize)
                 )
-                controller.targetController = this@SendSheetController
+                controller.targetController = this@SendSheetAtmController
                 router.pushController(RouterTransaction.with(controller))
             }
         }
@@ -464,6 +490,13 @@ class SendSheetController(args: Bundle? = null) :
             textInputAmount.isEnabled = !isBitpayPayment
             buttonScan.isVisible = !isBitpayPayment
             buttonPaste.isVisible = !isBitpayPayment
+
+            if(isAtm) {
+                buttonScan.isVisible = false
+                buttonPaste.isVisible = false
+                textInputAmount.isEnabled = false
+                textInputAddress.isEnabled = false
+            }
         }
 
         ifChanged(M::isFetchingPayment, M::isSendingTransaction) {
@@ -493,6 +526,10 @@ class SendSheetController(args: Bundle? = null) :
                 }
 
                 textInputDestinationTag.isEnabled = !isDestinationTagFromResolvedAddress
+
+                if (isAtm) {
+                    disableEditText(textInputDestinationTag)
+                }
             }
         }
 
@@ -505,6 +542,10 @@ class SendSheetController(args: Bundle? = null) :
                     textInputHederaMemo.setText(currentModel.hederaMemo?.value)
                 }
             }
+        }
+
+        if (isAtm && currentModel.transferFeeBasis == null) {
+            buttonEconomy.performClick()
         }
     }
 
@@ -621,32 +662,4 @@ class SendSheetController(args: Bundle? = null) :
         return context.getString(R.string.FeeSelector_estimatedDeliver)
             .format(context.getString(R.string.FeeSelector_lessThanMinutes, minutes))
     }
-}
-
-fun String.formatFiatForInputUi(currencyCode: String): String {
-    // Ensure decimal displayed when string has not fraction digits
-    val forceSeparator = contains('.')
-    // Ensure all fraction digits are displayed, even if they are all zero
-    val minFractionDigits = substringAfter('.', "").count()
-
-    val amount = toBigDecimalOrNull()
-
-    val currencyFormat = NumberFormat.getCurrencyInstance(Locale.getDefault()) as DecimalFormat
-    val decimalFormatSymbols = currencyFormat.decimalFormatSymbols
-    currencyFormat.isGroupingUsed = true
-    currencyFormat.roundingMode = BRConstants.ROUNDING_MODE
-    currencyFormat.isDecimalSeparatorAlwaysShown = forceSeparator
-    try {
-        val currency = java.util.Currency.getInstance(currencyCode)
-        val symbol = currency.symbol
-        decimalFormatSymbols.currencySymbol = symbol
-        currencyFormat.decimalFormatSymbols = decimalFormatSymbols
-        currencyFormat.negativePrefix = "-$symbol"
-        currencyFormat.maximumFractionDigits = MAX_DIGITS
-        currencyFormat.minimumFractionDigits = minFractionDigits
-    } catch (e: IllegalArgumentException) {
-        logError("Illegal Currency code: $currencyCode")
-    }
-
-    return currencyFormat.format(amount)
 }

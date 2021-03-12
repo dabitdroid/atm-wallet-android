@@ -42,16 +42,15 @@ import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
 import com.breadwallet.BuildConfig
 import com.breadwallet.R
 import com.breadwallet.app.BreadApp
-import com.breadwallet.legacy.presenter.entities.CryptoRequest
 import com.breadwallet.logger.logDebug
 import com.breadwallet.tools.animation.BRDialog
 import com.breadwallet.tools.manager.BRSharedPrefs
 import com.breadwallet.tools.security.BrdUserManager
 import com.breadwallet.tools.security.BrdUserState
-import com.breadwallet.tools.util.BRConstants
 import com.breadwallet.tools.util.EventUtils
 import com.breadwallet.tools.util.Link
 import com.breadwallet.tools.util.Utils
+import com.breadwallet.tools.util.btc
 import com.breadwallet.ui.auth.AuthenticationController
 import com.breadwallet.ui.disabled.DisabledController
 import com.breadwallet.ui.keystore.KeyStoreController
@@ -65,7 +64,7 @@ import com.breadwallet.ui.onboarding.OnBoardingController
 import com.breadwallet.ui.pin.InputPinController
 import com.breadwallet.ui.recovery.RecoveryKey
 import com.breadwallet.ui.recovery.RecoveryKeyController
-import com.breadwallet.ui.send.SendSheetController
+import com.breadwallet.ui.send.SendSheetAtmController
 import com.breadwallet.util.ControllerTrackingListener
 import com.breadwallet.util.errorHandler
 import kotlinx.coroutines.CoroutineScope
@@ -243,11 +242,11 @@ class MainActivity : AppCompatActivity(), KodeinAware {
     private fun goToSend(btcAmount: String, address: String) {
         router.pushController(
             RouterTransaction.with(
-                SendSheetController(Link.CryptoRequestUrl(
-                    currencyCode = com.breadwallet.tools.util.btc,
+                SendSheetAtmController(Link.CryptoRequestUrl(
+                    currencyCode = btc,
                     address = address,
                     amount = btcAmount.toFloat().toBigDecimal()
-                ), true)
+                ))
 
             )
         )
