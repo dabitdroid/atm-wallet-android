@@ -179,11 +179,6 @@ class SendSheetController(args: Bundle? = null) :
     }
 
     override fun bindView(modelFlow: Flow<M>): Flow<E> {
-        buttonFaq.setOnClickListener {
-            router.fragmentManager()?.let {
-                CashUI.showSupportPage(CashSupport.Builder().detail(Topic.SEND), it)
-            }
-        }
         return merge(
             keyboard.bindInput(),
             textInputMemo.bindFocusChanged(),
@@ -206,6 +201,7 @@ class SendSheetController(args: Bundle? = null) :
             textInputHederaMemo.textChanges().map {
                 E.TransferFieldUpdate.Value(TransferField.HEDERA_MEMO, it)
             },
+            buttonFaq.clicks().map { E.OnFaqClicked },
             buttonScan.clicks().map { E.OnScanClicked },
             buttonSend.clicks().map { E.OnSendClicked },
             buttonClose.clicks().map { E.OnCloseClicked },
@@ -549,14 +545,6 @@ class SendSheetController(args: Bundle? = null) :
     override fun onNegativeClicked(controller: ConfirmTxController) {
         eventConsumer
             .accept(E.ConfirmTx.OnCancelClicked)
-    }
-
-    private fun disableEditText(editText: EditText) {
-        editText.isClickable = false
-        editText.isFocusable = false
-        editText.isEnabled = false
-        editText.isCursorVisible = false
-        editText.keyListener = null
     }
 
     private fun setFeeOption(feeOption: TransferSpeed) {
