@@ -74,6 +74,7 @@
         android:layout_marginBottom="16dp"
         android:background="@android:color/transparent"
         android:padding="10dp"
+        app:buttonColor="@color/fabriik_gold"
         android:text="@string/StartPaperPhrase.buttonTitle"
         android:textColor="@color/white"
         android:textSize="@dimen/button_text_size"

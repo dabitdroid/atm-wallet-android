@@ -15,6 +15,7 @@
         android:layout_marginEnd="@dimen/bread_margin"
         android:layout_marginBottom="32dp"
         android:background="@android:color/transparent"
+        app:buttonColor="@color/fabriik_gold"
         android:padding="10dp"
         android:text="@string/RecoverWallet.next"
         android:textColor="@color/white"

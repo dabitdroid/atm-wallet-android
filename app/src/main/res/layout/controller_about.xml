@@ -68,8 +68,8 @@
 
     <ImageView
         android:id="@+id/brd_logo"
-        android:layout_width="132dp"
-        android:layout_height="80dp"
+        android:layout_width="70dp"
+        android:layout_height="60dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="60dp"
         android:layout_marginEnd="16dp"
