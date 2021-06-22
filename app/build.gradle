@@ -6,14 +6,14 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.google.protobuf'
-apply plugin: 'io.sweers.redacted.redacted-plugin'
+//apply plugin: 'io.sweers.redacted.redacted-plugin'
 apply from: file("../gradle/google-services.gradle")
 apply from: file("../gradle/copy-font-files.gradle")
 apply from: rootProject.file("jacoco.gradle")
 
-redactedPlugin {
-    replacementString = '***'
-}
+//redactedPlugin {
+//    replacementString = '***'
+//}
 
 detekt {
     toolVersion = "1.0.1"
@@ -30,8 +30,8 @@ android {
     ext {
         brdMarketingVersion = 4   // Major version. Usually affected by marketing. Maximum value: 99
         brdProductVersion = 5    // Minor version. Usually affected by product. Maximum value: 99
-        brdEngineeringVersion = 25 // Hot fix version. Usually affected by engineering. Maximum value: 9
-        brdBuildVersion = 32       // Build version. Increase for each new build. Maximum value: 999
+        brdEngineeringVersion = 26 // Hot fix version. Usually affected by engineering. Maximum value: 9
+        brdBuildVersion = 34       // Build version. Increase for each new build. Maximum value: 999
 
         // The version code must be monotonically increasing. It is used by Android to maintain upgrade/downgrade
         // relationship between builds with a max value of 2 100 000 000.
@@ -80,7 +80,7 @@ android {
     productFlavors {
         brd {
             manifestPlaceholders = [applicationIcon: "@mipmap/ic_cs_launcher_white"]
-            applicationId = "cash.just.wallet"
+            applicationId = "com.fabriik.atm"
             dimension "mode"
             resValue "string", "app_name", "Fabriik Wallet"
             buildConfigField "boolean", "BITCOIN_TESTNET", "false"
@@ -90,7 +90,7 @@ android {
         brdTestnet {
             resValue "string", "app_name", "Fabriik Wallet Tesnet"
             manifestPlaceholders = [applicationIcon: "@mipmap/ic_cs_launcher_testnet"]
-            applicationId = "cash.just.testnet"
+            applicationId = "com.fabriik.atm.testnet"
             dimension "mode"
             resValue "string", "app_name", "Fabriik Testnet"
             buildConfigField "boolean", "BITCOIN_TESTNET", "true"
@@ -226,7 +226,7 @@ protobuf {
     generateProtoTasks {
         all().each { task ->
             task.builtins {
-                java { option 'lite' }
+                java { option  'lite' }
             }
         }
     }
@@ -239,6 +239,7 @@ clean {
 dependencies {
     implementation project(":app-core")
     implementation "com.breadwallet.core:corecrypto-android:$core_version"
+    implementation "com.breadwallet.core:corecrypto-android:5.0.0"
 
     // AndroidX
     implementation "androidx.lifecycle:lifecycle-extensions:$ax_lifecycle_ext"
@@ -328,7 +329,7 @@ dependencies {
     debugImplementation "com.github.anrwatchdog:anrwatchdog:$anr_watchdog_version"
     implementation "com.google.firebase:firebase-crashlytics:$firebase_crashlytics_version"
 
-    compileOnly "io.sweers.redacted:redacted-compiler-plugin-annotation:$redacted_version"
+//    compileOnly "io.sweers.redacted:redacted-compiler-plugin-annotation:$redacted_version"
 
     detektPlugins "io.gitlab.arturbosch.detekt:detekt-formatting:$detekt_version"
 
@@ -336,7 +337,7 @@ dependencies {
 //        transitive = true
 //    }
 
-    implementation('com.github.atmcoin:cash-ui-android:4.1'){
+    implementation('com.github.atmcoin:cash-ui-android:4.4-fabriik'){
         transitive = true
     }
     implementation project(":AtmResources")

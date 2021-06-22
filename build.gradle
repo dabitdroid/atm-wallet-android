@@ -5,19 +5,20 @@ buildscript {
     repositories {
         mavenCentral()
         google()
+        mavenLocal()
         jcenter()
-        maven {
-            url 'https://dl.bintray.com/drewcarlson/redacted-plugin'
-            content {
-                includeGroup "io.sweers.redacted"
-            }
-        }
+//        maven {
+//            url 'https://dl.bintray.com/drewcarlson/redacted-plugin'
+//            content {
+//                includeGroup "io.sweers.redacted"
+//            }
+//        }
         maven {
             url "https://just-cash-artifactory.s3.amazonaws.com"
         }
     }
     dependencies {
-        classpath "io.sweers.redacted:redacted-compiler-gradle-plugin:$redacted_version"
+//        classpath "io.sweers.redacted:redacted-compiler-gradle-plugin:$redacted_version"
         classpath 'com.android.tools.build:gradle:4.0.1'
         classpath 'com.google.gms:google-services:4.3.3' // google-services plugin
         classpath "com.google.protobuf:protobuf-gradle-plugin:0.8.10"
@@ -34,25 +35,26 @@ plugins {
 
 allprojects {
     repositories {
-        exclusiveContent {
-            forRepository {
-                maven {
-                    url 'https://dl.bintray.com/brd/walletkit-java'
-                }
-            }
-            filter {
-                includeGroup "com.breadwallet.core"
-            }
-        }
+//        exclusiveContent {
+//            forRepository {
+//                maven {
+//                    url 'https://dl.bintray.com/brd/walletkit-java'
+//                }
+//            }
+//            filter {
+//                includeGroup "com.breadwallet.core"
+//            }
+//        }
+        mavenLocal()
         mavenCentral()
         google()
         jcenter()
-        maven {
-            url 'https://dl.bintray.com/drewcarlson/redacted-plugin'
-            content {
-                includeGroup "io.sweers.redacted"
-            }
-        }
+//        maven {
+//            url 'https://dl.bintray.com/drewcarlson/redacted-plugin'
+//            content {
+//                includeGroup "io.sweers.redacted"
+//            }
+//        }
         maven {
             url "https://just-cash-artifactory.s3.amazonaws.com"
         }
