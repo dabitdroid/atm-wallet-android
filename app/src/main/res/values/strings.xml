@@ -491,17 +491,18 @@
     <!-- Onboarding screen Skip button title that allows the user to exit the onboarding process. -->
     <string name="Onboarding.skip">Skip</string>
     <!-- Onboarding screen Page 4 title -->
-    <string name="OnboardingPageFour.title">Welcome to Fabriik Networks!</string>
+    <string name="OnboardingPageFour.title">Welcome to Fabriik One Wallet!</string>
+    <string name="OnboardingThreeTwo.title">Manage your assets, hold and take control of your investments</string>
     <!-- Onboarding screen Page 1 title -->
-    <string name="OnboardingPageOne.title">Welcome to your ATM enabled virtual currency wallet!</string>
+    <string name="OnboardingPageOne.title">Welcome to your new digital asset wallet</string>
     <!-- Onboarding screen Page 3 subtitle -->
     <string name="OnboardingPageThree.subtitle">Invest and diversify with Fabriik, easily and securely.</string>
     <!-- Onboarding screen Page 3 title -->
-    <string name="OnboardingPageThree.title">Buy and trade bitcoin, tokens, and other digital currencies.</string>
+    <string name="OnboardingPageThree.title">Send and receive crypto with your friends</string>
     <!-- Onboarding screen Page 2 subtitle -->
     <string name="OnboardingPageTwo.subtitle">Our wallet is open source and fully compatible with any other wallet.</string>
     <!-- Onboarding screen Page 2 title -->
-    <string name="OnboardingPageTwo.title">Direct cash redemption of crypto at thousands of ATMs.</string>
+    <string name="OnboardingPageTwo.title">Join millions of people around the world who trust FABRIIK</string>
     <!-- Eg. Send 1.0Eth to purchase CCC -->
     <string name="PaymentConfirmation.amountText">Send %1$s to purchase %2$s</string>
     <!-- Payment confirmation view title -->

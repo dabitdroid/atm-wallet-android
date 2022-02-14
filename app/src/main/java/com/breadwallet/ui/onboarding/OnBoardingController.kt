@@ -26,13 +26,13 @@ package com.breadwallet.ui.onboarding
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.viewpager.widget.ViewPager
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.support.RouterPagerAdapter
 import com.breadwallet.R
-import com.breadwallet.app.BreadApp
 import com.breadwallet.ui.BaseController
 import com.breadwallet.ui.BaseMobiusController
 import com.breadwallet.ui.flowbind.clicks
@@ -96,7 +96,7 @@ class OnBoardingController(
 
     override fun M.render() {
         ifChanged(M::page) { page ->
-            listOf(indicator1, indicator2)
+            listOf(indicator1, indicator2, indicator3, indicator4)
                 .forEachIndexed { index, indicator ->
                     indicator.background = when (page) {
                         index + 1 -> activeIndicator
@@ -106,8 +106,8 @@ class OnBoardingController(
         }
 
         ifChanged(M::isFirstPage) { isFirstPage ->
-            button_skip.isVisible = isFirstPage
-            button_back.isVisible = isFirstPage
+            button_skip.isInvisible = !isFirstPage
+            button_back.isInvisible = !isFirstPage
         }
 
         ifChanged(M::isLoading) { isLoading ->
@@ -121,15 +121,16 @@ class OnBoardingController(
             if (!router.hasRootController()) {
                 val root = when (position) {
                     0 -> PageOneController()
-                    // 1 -> PageTwoController()
-                    1 -> PageThreeController()
+                    1 -> PageTwoController()
+                    2 -> PageThreeController()
+                    3 -> PageFourController()
                     else -> error("Unknown position")
                 }
                 router.setRoot(RouterTransaction.with(root))
             }
         }
 
-        override fun getCount(): Int = 2
+        override fun getCount(): Int = 4
     }
 
     override fun handleBack() = currentModel.isLoading
@@ -139,8 +140,11 @@ class PageOneController(args: Bundle? = null) : BaseController(args) {
     override val layoutId = R.layout.controller_onboarding_page
     override fun onCreateView(view: View) {
         super.onCreateView(view)
+        val theme = checkNotNull(activity).theme
+        val resources = checkNotNull(resources)
         primary_text.setText(R.string.OnboardingPageTwo_title)
-        secondary_text.setText(R.string.OnboardingPageTwo_subtitle)
+        secondary_text.text = null
+        image_view.setImageDrawable(resources.getDrawable(R.drawable.page1, theme))
     }
 }
 
@@ -148,21 +152,34 @@ class PageTwoController(args: Bundle? = null) : BaseController(args) {
     override val layoutId = R.layout.controller_onboarding_page
     override fun onCreateView(view: View) {
         super.onCreateView(view)
-        val resources = checkNotNull(resources)
         val theme = checkNotNull(activity).theme
+        val resources = checkNotNull(resources)
         primary_text.setText(R.string.OnboardingPageThree_title)
-        secondary_text.setText(R.string.OnboardingPageThree_subtitle)
-        image_view.setImageDrawable(resources.getDrawable(R.drawable.ic_currencies, theme))
+        secondary_text.text = null
+        image_view.setImageDrawable(resources.getDrawable(R.drawable.page2, theme))
     }
 }
 
 class PageThreeController(args: Bundle? = null) : BaseController(args) {
     override val layoutId = R.layout.controller_onboarding_page
+    override fun onCreateView(view: View) {
+        super.onCreateView(view)
+        val theme = checkNotNull(activity).theme
+        val resources = checkNotNull(resources)
+        primary_text.setText(R.string.OnboardingThreeTwo_title)
+        secondary_text.text = null
+        image_view.setImageDrawable(resources.getDrawable(R.drawable.page3, theme))
+    }
+}
+
+
+class PageFourController(args: Bundle? = null) : BaseController(args) {
+    override val layoutId = R.layout.controller_onboarding_page
 
     override fun onCreateView(view: View) {
         super.onCreateView(view)
         val onBoardingController = (parentController as OnBoardingController)
-
+        primary_text.setText("page4")
         last_screen_title.isVisible = true
         button_buy.isVisible = false
         button_browse.isVisible = true

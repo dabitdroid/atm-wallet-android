@@ -295,6 +295,13 @@ public class BRButton extends Button {
             setTextColor(getContext().getColor(R.color.white));
             bPaint.setColor(getContext().getColor(buttonColorValue.resourceId));
             bPaint.setStyle(Paint.Style.FILL);
+        } else if (type == 10) {
+            setHasShadow(false);
+            TypedValue buttonColorValue = new TypedValue();
+            getContext().getTheme().resolveAttribute(R.attr.approve_wallet_link_button, buttonColorValue, true);
+            setTextColor(getContext().getColor(R.color.black));
+            bPaint.setColor(getContext().getColor(buttonColorValue.resourceId));
+            bPaint.setStyle(Paint.Style.FILL);
         }
         invalidate();
     }
