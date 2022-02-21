@@ -45,7 +45,7 @@ android {
     defaultConfig {
         applicationId = 'com.breadwallet'
         minSdkVersion 24
-        targetSdkVersion 29
+        targetSdkVersion 30
 
         versionCode brdVersionCode
         versionName "$brdMarketingVersion.$brdProductVersion.$brdEngineeringVersion"
@@ -80,17 +80,16 @@ android {
     productFlavors {
         brd {
             manifestPlaceholders = [applicationIcon: "@mipmap/ic_cs_launcher_white"]
-            applicationId = "com.fabriik.atm"
+            applicationId = "com.fabriik.app"
             dimension "mode"
-            resValue "string", "app_name", "Fabriik Wallet"
+            resValue "string", "app_name", "Fabriik"
             buildConfigField "boolean", "BITCOIN_TESTNET", "false"
             // Uncomment to fake sign a mainnet release build for testing.
             missingDimensionStrategy 'network', 'onMainnet'
         }
         brdTestnet {
-            resValue "string", "app_name", "Fabriik Wallet Tesnet"
             manifestPlaceholders = [applicationIcon: "@mipmap/ic_cs_launcher_testnet"]
-            applicationId = "com.fabriik.atm.testnet"
+            applicationId = "com.fabriik.app.testnet"
             dimension "mode"
             resValue "string", "app_name", "Fabriik Testnet"
             buildConfigField "boolean", "BITCOIN_TESTNET", "true"
