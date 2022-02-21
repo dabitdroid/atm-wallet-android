@@ -491,7 +491,7 @@
     <!-- Onboarding screen Skip button title that allows the user to exit the onboarding process. -->
     <string name="Onboarding.skip">Skip</string>
     <!-- Onboarding screen Page 4 title -->
-    <string name="OnboardingPageFour.title">Welcome to Fabriik One Wallet!</string>
+    <string name="OnboardingPageFour.title">Welcome to Fabriik Wallet!</string>
     <string name="OnboardingThreeTwo.title">Manage your assets, hold and take control of your investments</string>
     <!-- Onboarding screen Page 1 title -->
     <string name="OnboardingPageOne.title">Welcome to your new digital asset wallet</string>

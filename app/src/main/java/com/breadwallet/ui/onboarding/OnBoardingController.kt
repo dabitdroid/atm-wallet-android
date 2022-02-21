@@ -179,13 +179,15 @@ class PageFourController(args: Bundle? = null) : BaseController(args) {
     override fun onCreateView(view: View) {
         super.onCreateView(view)
         val onBoardingController = (parentController as OnBoardingController)
-        primary_text.setText("page4")
+        val theme = checkNotNull(activity).theme
+        val resources = checkNotNull(resources)
+        image_view.setImageDrawable(resources.getDrawable(R.drawable.ic_flower, theme))
         last_screen_title.isVisible = true
         button_buy.isVisible = false
         button_browse.isVisible = true
         primary_text.isVisible = false
         secondary_text.isVisible = false
-        image_view.isVisible = false
+        image_view.isVisible = true
         button_buy.setOnClickListener {
             onBoardingController.eventConsumer.accept(E.OnBuyClicked)
         }
