@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+    <item name="fabriik_dark_blue" type="color">#122348</item>
+    <item name="fabriik_action_blue" type="color">#2C78FF</item>
     <item name="white" type="color">#ffffff</item>
     <item name="white_transparent_25" type="color">#40ffffff</item>
     <item name="white_transparent_10" type="color">#14ffffff</item>
